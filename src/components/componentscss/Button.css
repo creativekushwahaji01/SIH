@@ -1,0 +1,99 @@
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s;
+    outline: none;
+    cursor: pointer;
+  }
+  
+  .button:focus-visible {
+    outline: 2px solid var(--ring-color);
+    outline-offset: 2px;
+  }
+  
+  .button:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  
+  /* Variants */
+  .button-default {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+  
+  .button-default:hover {
+    background-color: var(--primary-hover);
+  }
+  
+  .button-destructive {
+    background-color: var(--destructive);
+    color: var(--destructive-foreground);
+  }
+  
+  .button-destructive:hover {
+    background-color: var(--destructive-hover);
+  }
+  
+  .button-outline {
+    border: 1px solid var(--input-border);
+    background-color: var(--background);
+  }
+  
+  .button-outline:hover {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+  
+  .button-secondary {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+  }
+  
+  .button-secondary:hover {
+    background-color: var(--secondary-hover);
+  }
+  
+  .button-ghost:hover {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+  
+  .button-link {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+  
+  .button-link:hover {
+    text-decoration: none;
+  }
+  
+  /* Sizes */
+  .button-default {
+    height: 2.5rem;
+    padding: 0.5rem 1rem;
+  }
+  
+  .button-sm {
+    height: 2.25rem;
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .button-lg {
+    height: 2.75rem;
+    border-radius: 0.375rem;
+    padding: 0.5rem 2rem;
+  }
+  
+  .button-icon {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+
+  
