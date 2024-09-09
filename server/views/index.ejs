@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Coal Emission Calculator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><%= title %></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Emission Calculation Form -->
+  <div class="container mt-5">
+    <h2>Calculate Emissions</h2>
+    <form id="emissionForm" action="/calculate" method="POST">
+      <div class="mb-3">
+        <label for="excavationFuelType" class="form-label">Excavation Fuel Type</label>
+        <input type="text" class="form-control" id="excavationFuelType" name="excavation[fuelType]" required>
+      </div>
+      <div class="mb-3">
+        <label for="excavationFuelQuantity" class="form-label">Excavation Fuel Quantity</label>
+        <input type="number" class="form-control" id="excavationFuelQuantity" name="excavation[fuelQuantity]" required>
+      </div>
+      <div class="mb-3">
+        <label for="transportationFuelType" class="form-label">Transportation Fuel Type</label>
+        <input type="text" class="form-control" id="transportationFuelType" name="transportation[fuelType]" required>
+      </div>
+      <div class="mb-3">
+        <label for="transportationFuelQuantity" class="form-label">Transportation Fuel Quantity</label>
+        <input type="number" class="form-control" id="transportationFuelQuantity" name="transportation[fuelQuantity]" required>
+      </div>
+      <div class="mb-3">
+        <label for="otherEquipmentFuelType" class="form-label">Other Equipment Fuel Type</label>
+        <input type="text" class="form-control" id="otherEquipmentFuelType" name="otherEquipment[fuelType]" required>
+      </div>
+      <div class="mb-3">
+        <label for="otherEquipmentFuelQuantity" class="form-label">Other Equipment Fuel Quantity</label>
+        <input type="number" class="form-control" id="otherEquipmentFuelQuantity" name="otherEquipment[fuelQuantity]" required>
+      </div>
+      <div class="mb-3">
+        <label for="electricityUsage" class="form-label">Electricity Usage (kWh)</label>
+        <input type="number" class="form-control" id="electricityUsage" name="electricityUsage[usageInKwh]" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Calculate Emission</button>
+    </form>
+  </div>
+
+  <!-- Button to Fetch Emission History -->
+  <div class="container mt-3">
+    <button id="historyBtn" class="btn btn-info">View Emission History</button>
+    <div id="emissionHistory" class="mt-3"></div>
+  </div>
+  <div class="container"></div>
+    <h1>Coal Production Data</h1>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>CIL</th>
+          <th>SCCL</th>
+          <th>Others/Captive</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% miningData.forEach((item) => { %>
+        <tr>
+          <td><%= item.year %></td>
+          <td><%= item.CIL %></td>
+          <td><%= item.SCCL %></td>
+          <td><%= item.Others_Captive %></td>
+          <td><%= item.Total %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+  <!-- Script to Fetch and Display Emission History -->
+  <script>
+    document.getElementById('historyBtn').addEventListener('click', async () => {
+      try {
+        const response = await fetch('/calchistory');
+        const data = await response.json();
+        const historyDiv = document.getElementById('emissionHistory');
+        historyDiv.innerHTML = data.map(item => `
+          <p>Excavation: ${item.excavation.fuelQuantity} (${item.excavation.fuelType})</p>
+          <p>Transportation: ${item.transportation.fuelQuantity} (${item.transportation.fuelType})</p>
+          <p>Other Equipment: ${item.otherEquipment.fuelQuantity} (${item.otherEquipment.fuelType})</p>
+          <p>Electricity Usage: ${item.electricityUsage.usageInKwh} kWh</p>
+          <p>Total Emission: ${item.totalEmission} tons of CO2</p>
+          <hr/>
+        `).join('');
+      } catch (error) {
+        console.error('Error fetching history:', error);
+      }
+    });
+  </script>
+
+</body>
+
+</html>
